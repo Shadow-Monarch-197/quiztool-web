@@ -1,0 +1,8 @@
+# Angular
+node_modules/
+dist/
+.angular/
+!src/environments/
+*.log
+# VS Code (optional)
+.vscode/

@@ -1,0 +1,23 @@
+<div class="container py-5 text-center">
+  <div class="card shadow-sm p-4 mx-auto" style="max-width:520px;">
+    <h3 class="mb-2">Thanks! Your attempt was submitted 🎉</h3>
+    <div class="text-muted">Attempt ID: {{ attemptId }}</div>
+
+    <div *ngIf="hasSummary" class="alert alert-success mt-3 text-start">
+      <div class="h5 mb-1">Score: {{ score }} / {{ total }}</div>
+      <div class="small">
+        Answered: <b>{{ answered }}</b> &nbsp;|&nbsp; Unanswered: <b>{{ unanswered }}</b>
+      </div>
+      <div class="small text-muted mt-2">
+        Note: <i>Subjective answers will be evaluated by an admin later and your final score may change.</i>
+      </div>
+    </div>
+
+
+    <div *ngIf="!hasSummary" class="alert alert-info mt-3 text-start">
+      This attempt was already submitted earlier on this test. Summary isn't available on this device.
+    </div>
+
+    <button class="btn btn-primary mt-2" (click)="goToTests()">Back to tests</button>
+  </div>
+</div>

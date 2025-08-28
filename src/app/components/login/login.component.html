@@ -1,0 +1,105 @@
+<div class="container py-4">
+  <div class="auth-wrap rounded-xl">
+    
+    <section class="d-flex flex-column justify-content-center">
+      <div class="mb-5">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <i class="bi bi-shield-lock-fill text-primary fs-4"></i>
+          <span class="fw-semibold text-primary">QuizTool</span>
+        </div>
+        <h1 class="display-5 h-title mb-2">Holla, <br/>Welcome Back</h1>
+        <p class="text-muted mb-0">Hey, welcome back to your special place.</p>
+      </div>
+
+      <div class="card glass p-4 max-w-420">
+
+       
+        <div class="d-flex gap-3 mb-3" *ngIf="!showForgot">
+          <button class="btn btn-sm" [ngClass]="toggleForm ? 'btn-primary' : 'btn-outline-primary'"
+                  (click)="toggleForm = true">Sign in</button>
+          <button class="btn btn-sm" [ngClass]="!toggleForm ? 'btn-primary' : 'btn-outline-primary'"
+                  (click)="toggleForm = false">Sign up</button>
+        </div>
+
+       
+        <form *ngIf="toggleForm && !showForgot && !awaitingOtp"
+              [formGroup]="loginForm" (ngSubmit)="onLogin()" class="vstack gap-3">
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0"><i class="bi bi-envelope"></i></span>
+            <input type="email" formControlName="email" placeholder="Email" class="form-control border-start-0" />
+          </div>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0"><i class="bi bi-lock"></i></span>
+            <input type="password" formControlName="password" placeholder="Password" class="form-control border-start-0" />
+          </div>
+
+          <div class="d-flex align-items-center justify-content-between">
+            <label class="d-inline-flex align-items-center gap-2 small text-muted">
+              <input type="checkbox" class="form-check-input m-0" /> Remember me
+            </label>
+            <button type="button" class="btn btn-link p-0 small" (click)="openForgot()">Forgot password?</button>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 py-2">Send OTP</button>
+        </form>
+
+   
+        <form *ngIf="toggleForm && !showForgot && awaitingOtp"
+              [formGroup]="otpForm" (ngSubmit)="onVerifyOtp()" class="vstack gap-3">
+          <div class="alert alert-info small">
+            We’ve emailed a 6-digit code to <b>{{ loginForm.value.email }}</b>. Enter it below.
+          </div>
+          <input type="text" formControlName="otp" maxlength="6" class="form-control text-center"
+                 placeholder="Enter 6-digit OTP" />
+          <button type="submit" class="btn btn-success w-100 py-2">Verify & Sign In</button>
+        </form>
+
+
+        <form *ngIf="!toggleForm && !showForgot" [formGroup]="registerForm" (ngSubmit)="onRegister()" class="vstack gap-3">
+          <input type="text" formControlName="name" placeholder="Full name" class="form-control" />
+          <input type="email" formControlName="email" placeholder="Email" class="form-control" />
+          <input type="text" formControlName="mobileno" placeholder="Mobile (optional)" class="form-control" />
+          <input type="password" formControlName="password" placeholder="Password" class="form-control" />
+          <button type="submit" class="btn btn-primary w-100 py-2">Create account</button>
+        </form>
+
+    
+        <div *ngIf="showForgot" class="vstack gap-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <h6 class="mb-0">Reset password</h6>
+            <button class="btn btn-sm btn-outline-secondary" (click)="showForgot=false">Back</button>
+          </div>
+
+       
+          <form [formGroup]="forgotForm" (ngSubmit)="sendForgotOtp()" class="vstack gap-2">
+            <input type="email" formControlName="email" class="form-control" placeholder="Your registered email" />
+            <button class="btn btn-outline-primary w-100">Send OTP</button>
+          </form>
+
+       
+          <form [formGroup]="resetForm" (ngSubmit)="doResetPassword()" class="vstack gap-2">
+            <input type="email" formControlName="email" class="form-control" placeholder="Email (auto-filled)" />
+            <input type="text" formControlName="otp" maxlength="6" class="form-control" placeholder="OTP" />
+            <input type="password" formControlName="newPassword" class="form-control" placeholder="New password" />
+            <button class="btn btn-success w-100">Update password</button>
+          </form>
+        </div>
+
+        <p class="text-center small text-muted mt-3 mb-0" *ngIf="!showForgot">
+          By continuing you agree to our <a href="#" class="text-decoration-none">Terms</a>.
+        </p>
+      </div>
+    </section>
+
+
+    <aside class="d-flex align-items-center justify-content-center">
+      <div class="w-100">
+        <div class="rounded-xl p-4 p-lg-5"
+             style="background:linear-gradient(135deg,#f0f4ff, #f7f3ff); border:1px solid #eef; box-shadow: var(--shadow);">
+          <img src="assets/illustrations/login-hero.svg"
+               alt="Welcome illustration" class="img-fluid img-fade" />
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>

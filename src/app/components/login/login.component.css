@@ -1,0 +1,3 @@
+
+:host ::ng-deep .auth-wrap .card{ border: none; }
+:host ::ng-deep .input-group .form-control{ box-shadow: none; }
