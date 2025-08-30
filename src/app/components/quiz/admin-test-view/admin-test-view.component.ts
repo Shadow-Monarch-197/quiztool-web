@@ -16,6 +16,7 @@ export class AdminTestViewComponent implements OnInit {
   test: {
     id: number;
     title: string;
+    isLocked?: boolean; //NEW
     questions: Array<{
       id: number;
       text: string;
@@ -54,6 +55,7 @@ export class AdminTestViewComponent implements OnInit {
 
   deleteQuestion(qId: number) {
     if (!this.test) return;
+    if (this.test.isLocked) { alert('This test is locked and cannot be modified.'); return; }
     if (!confirm('Delete this question?')) return;
 
     this.saving = true;

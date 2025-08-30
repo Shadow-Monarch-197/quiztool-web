@@ -19,6 +19,7 @@ import { AdminCreateQuestionComponent } from './components/quiz/admin-create-que
 import { AdminTestViewComponent } from './components/quiz/admin-test-view/admin-test-view.component';
 import { AttemptReviewComponent } from './components/quiz/attempt-review/attempt-review.component';
 import { AttemptSubmittedComponent } from './components/quiz/attempt-submitted/attempt-submitted.component';
+import { AdminUploadReviewComponent } from './components/quiz/admin-upload-review/admin-upload-review.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { AttemptSubmittedComponent } from './components/quiz/attempt-submitted/a
     AdminTestViewComponent,
     AttemptReviewComponent,
     AttemptSubmittedComponent,
+    AdminUploadReviewComponent,
   ],
   imports: [
     BrowserModule,

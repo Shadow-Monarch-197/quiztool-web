@@ -1,6 +1,10 @@
 <div class="container py-4" *ngIf="!loading; else busy">
   <div class="d-flex align-items-center justify-content-between mb-3">
     <h3 class="mb-0">{{ test?.title }}</h3>
+      <h5 class="mb-0">
+        {{ test?.title }}
+        <span *ngIf="test?.isLocked" class="badge bg-secondary ms-2">Locked</span> 
+      </h5>
     <div class="d-flex gap-2">
       <span class="badge text-bg-secondary"
         >{{ test?.questions?.length || 0 }} questions</span

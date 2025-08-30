@@ -1,0 +1,161 @@
+<!-- NEW -->
+<div class="container my-4">
+  <h4 class="mb-3">
+    <i class="bi bi-file-earmark-spreadsheet me-2"></i>Review & Edit Parsed
+    Questions
+  </h4>
+
+  <div class="mb-3">
+    <label class="form-label fw-semibold">Test Title</label>
+    <input
+      class="form-control"
+      [(ngModel)]="title"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="Enter test title"
+    />
+  </div>
+
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <button
+        class="nav-link"
+        [class.active]="activeTab === 'edit'"
+        (click)="activeTab = 'edit'"
+      >
+        Edit
+      </button>
+    </li>
+    <li class="nav-item">
+      <button
+        class="nav-link"
+        [class.active]="activeTab === 'preview'"
+        (click)="activeTab = 'preview'"
+      >
+        Preview
+      </button>
+    </li>
+  </ul>
+
+  <div *ngIf="activeTab === 'edit'">
+    <div class="d-flex justify-content-end mb-2">
+      <button class="btn btn-sm btn-outline-primary" (click)="addQuestion()">
+        <i class="bi bi-plus-lg me-1"></i> Add Question
+      </button>
+    </div>
+
+    <div *ngFor="let q of questions; let i = index" class="card mb-3 shadow-sm">
+      <div
+        class="card-header d-flex align-items-center justify-content-between"
+      >
+        <div class="fw-semibold">Question {{ i + 1 }}</div>
+        <button
+          class="btn btn-sm btn-outline-danger"
+          (click)="removeQuestion(i)"
+        >
+          Remove
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="mb-2">
+          <label class="form-label">Text</label>
+          <textarea
+            class="form-control"
+            rows="2"
+            [(ngModel)]="q.text"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="Enter question text"
+          ></textarea>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label me-3">Type</label>
+          <div class="btn-group">
+            <button
+              type="button"
+              class="btn"
+              [class.btn-primary]="q.type === 'objective'"
+              [class.btn-outline-primary]="q.type !== 'objective'"
+              (click)="onTypeChange(i, 'objective')"
+            >
+              Objective
+            </button>
+            <button
+              type="button"
+              class="btn"
+              [class.btn-primary]="q.type === 'subjective'"
+              [class.btn-outline-primary]="q.type !== 'subjective'"
+              (click)="onTypeChange(i, 'subjective')"
+            >
+              Subjective
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-2" *ngIf="q.imageUrl">
+          <label class="form-label">Image</label>
+          <div>
+            <img
+              [src]="q.imageUrl"
+              (error)="onImgError($event)"
+              style="max-height: 120px"
+            />
+          </div>
+        </div>
+
+        <div *ngIf="q.type === 'objective'">
+          <label class="form-label">Options</label>
+          <div
+            *ngFor="let o of q.options; let j = index"
+            class="input-group mb-2"
+          >
+            <span class="input-group-text">
+              <input
+                type="radio"
+                [checked]="o.isCorrect"
+                (change)="markCorrect(i, j)"
+              />
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="o.text"
+              [ngModelOptions]="{ standalone: true }"
+              placeholder="Option text"
+            />
+            <button class="btn btn-outline-danger" (click)="removeOption(i, j)">
+              Remove
+            </button>
+          </div>
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            (click)="addOption(i)"
+          >
+            Add Option
+          </button>
+        </div>
+
+        <div *ngIf="q.type === 'subjective'">
+          <label class="form-label">Model Answer (optional)</label>
+          <textarea
+            class="form-control"
+            rows="2"
+            [(ngModel)]="q.modelAnswer"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="Reference / model answer"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab === 'preview'">
+    <pre class="bg-light p-3 rounded small">{{ getPreview() | json }}</pre>
+  </div>
+
+  <div class="d-flex justify-content-end gap-2 mt-3">
+    <button class="btn btn-outline-secondary" (click)="cancel()">Cancel</button>
+    <button class="btn btn-success" [disabled]="saving" (click)="save()">
+      {{ saving ? "Saving…" : "Save & Lock Test" }}
+    </button>
+  </div>
+</div>

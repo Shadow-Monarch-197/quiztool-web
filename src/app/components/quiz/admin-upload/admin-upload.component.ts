@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router'; // NEW
 import { QuizService } from 'src/app/services/quiz.service';
 
 @Component({
@@ -12,20 +13,26 @@ export class AdminUploadComponent {
   result: any;
   tests: any[] = [];
 
-  constructor(private quiz: QuizService) { this.load(); }
+constructor(private quiz: QuizService, private router: Router) { this.load(); }
 
   onFile(ev: any) {
     const f: File = ev.target.files?.[0];
     this.file = f;
   }
 
-  onUpload() {
-    if (!this.file) return;
-    this.quiz.uploadExcel(this.file, this.title).subscribe({
-      next: (res) => { this.result = res; this.load(); },
-      error: (err) => alert(err.error?.message || 'Upload failed')
-    });
-  }
+
+// 30 Aug 
+  // CHANGED: go through parse → review instead of direct save
+  onUpload() {
+    if (!this.file) return;
+    this.quiz.parseUpload(this.file, this.title).subscribe({ // CHANGED
+      next: (res) => {
+        // navigate to review page with state
+        this.router.navigate(['/admin-upload-review'], { state: { draft: res } }); // NEW
+      },
+      error: (err) => alert(err.error?.message || 'Upload parse failed') // CHANGED
+    });
+  }
 
   load() {
     this.quiz.listTests().subscribe({

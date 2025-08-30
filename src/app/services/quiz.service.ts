@@ -58,12 +58,29 @@ export class QuizService {
   
 }
 
-  uploadExcel(file: File, title?: string): Observable<any> {
-    const form = new FormData();
-    form.append('file', file);
-    if (title) form.append('title', title);
-    return this.http.post(`${this.base}/Tests/upload`, form);
-  }
+  //30 Aug
+  // CHANGED: upload flow now can use parse-upload + review
+  uploadExcel(file: File, title?: string): Observable<any> {
+    const form = new FormData();
+    form.append('file', file);
+    if (title) form.append('title', title);
+    return this.http.post(`${this.base}/Tests/upload`, form);
+  }
+
+  // 30 Aug
+  // NEW: parse for preview without saving
+  parseUpload(file: File, title?: string): Observable<{ title: string; questions: any[] }> { // NEW
+    const form = new FormData(); // NEW
+    form.append('file', file); // NEW
+    if (title) form.append('title', title); // NEW
+    return this.http.post<{ title: string; questions: any[] }>(`${this.base}/Tests/parse-upload`, form); // NEW
+  }
+
+  // 30 Aug
+  // NEW: persist edited preview as locked test
+  saveParsedTest(body: { title: string; questions: any[] }): Observable<any> { // NEW
+    return this.http.post(`${this.base}/Tests/save-parsed`, body); // NEW
+  }
 
   listTests(): Observable<any[]> {
     return this.http.get<any[]>(`${this.base}/Tests`);
@@ -92,9 +109,11 @@ getTests() {
   return this.http.get<TestSummary[]>(`${this.base}/Tests`);
 }
 
-getAdminTest(id: number) {
-  return this.http.get<any>(`${this.base}/Tests/${id}/admin`);
-}
+//30 Aug
+ // CHANGED: admin view also returns isLocked
+  getAdminTest(id: number) {
+    return this.http.get<any>(`${this.base}/Tests/${id}/admin`);
+  }
 
 deleteQuestion(questionId: number) {
   return this.http.delete(`${this.base}/Tests/questions/${questionId}`);

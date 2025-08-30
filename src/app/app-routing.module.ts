@@ -131,6 +131,7 @@ import { adminGuard, adminMatchGuard } from './guards/admin.guard';
 import { AdminTestViewComponent } from './components/quiz/admin-test-view/admin-test-view.component';
 import { AttemptReviewComponent } from './components/quiz/attempt-review/attempt-review.component';
 import { AttemptSubmittedComponent } from './components/quiz/attempt-submitted/attempt-submitted.component';
+import { AdminUploadReviewComponent } from './components/quiz/admin-upload-review/admin-upload-review.component'; // NEW
 
 
 const routes: Routes = [
@@ -197,6 +198,7 @@ const routes: Routes = [
   canMatch: [authMatchGuard],
   canActivate: [authGuard],
 },
+{ path: 'admin-upload-review', component: AdminUploadReviewComponent }, // NEW
 
   // Fallback
   { path: '**', redirectTo: 'login' }
