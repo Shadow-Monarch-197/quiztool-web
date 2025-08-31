@@ -44,11 +44,15 @@ export class AdminCreateQuestionComponent implements OnInit {
     const title = prompt('New test title?');
     if (!title) return;
 
-    this.quiz.createTest(title).subscribe({
+    // NEW: ask for time limit minutes
+    const t = prompt('Time limit in minutes (leave blank for none):'); // NEW
+    const minutes = t && t.trim() !== '' ? Number(t) : null; // NEW
+    const timeLimitMinutes = (minutes != null && !isNaN(minutes) && minutes > 0) ? minutes : null; // NEW
+
+    this.quiz.createTest(title, timeLimitMinutes).subscribe({ // CHANGED
       next: (t: TestSummary) => {
         alert('Test created.');
-      
-        this.tests = [{ id: t.id, title: t.title, createdAt: t.createdAt, questionCount: 0 }, ...this.tests];
+        this.tests = [{ id: t.id, title: t.title, createdAt: t.createdAt, questionCount: 0, timeLimitMinutes: (t as any).timeLimitMinutes }, ...this.tests]; // CHANGED
         this.testId = t.id;
       },
       error: (err: any) => {

@@ -15,6 +15,20 @@
     />
   </div>
 
+  <!-- NEW: time limit editor -->
+  <div class="mb-3"> <!-- NEW -->
+    <label class="form-label fw-semibold">Time Limit (minutes, optional)</label> <!-- NEW -->
+    <input
+      type="number"
+      min="1"
+      class="form-control"
+      [(ngModel)]="timeLimitMinutes"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="e.g. 30"
+    /> <!-- NEW -->
+    <div class="form-text text-muted">Leave blank for no time limit.</div> <!-- NEW -->
+  </div> <!-- NEW -->
+
   <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
       <button

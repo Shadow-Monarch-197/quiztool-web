@@ -24,6 +24,8 @@ interface PreviewQuestion {
 })
 export class AdminUploadReviewComponent implements OnInit {
   title = '';
+  // NEW: time limit minutes for the test
+  timeLimitMinutes: number | null = null; // NEW
   questions: PreviewQuestion[] = [];
   activeTab: 'edit' | 'preview' = 'edit';
   saving = false;
@@ -38,6 +40,8 @@ export class AdminUploadReviewComponent implements OnInit {
       return;
     }
     this.title = draft.title || '';
+     // NEW: receive possible time limit from parse-upload
+    this.timeLimitMinutes = draft.timeLimitMinutes ?? null; // NEW
     // normalize types to union
     this.questions = (draft.questions || []).map((q: any) => ({
       text: q.text || '',
@@ -55,8 +59,8 @@ export class AdminUploadReviewComponent implements OnInit {
   }
 
   // FIX: avoid inline object literal in template
-  getPreview() { // FIX
-    return { title: this.title, questions: this.questions };
+  getPreview() {
+    return { title: this.title, timeLimitMinutes: this.timeLimitMinutes, questions: this.questions }; // CHANGED
   }
 
   addQuestion() {
@@ -136,7 +140,11 @@ export class AdminUploadReviewComponent implements OnInit {
     }
 
     this.saving = true;
-    this.quiz.saveParsedTest({ title: this.title.trim(), questions }).subscribe({
+    this.quiz.saveParsedTest({
+      title: this.title.trim(),
+      timeLimitMinutes: (this.timeLimitMinutes ?? null), // NEW
+      questions
+    }).subscribe({
       next: (res) => {
         alert('Test saved and locked.');
         this.saving = false;

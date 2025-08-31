@@ -20,6 +20,8 @@ export interface TestSummary {
   title: string;
   questionCount: number;
   createdAt: string;
+  // NEW: optional time limit info
+  timeLimitMinutes?: number | null; // NEW
 }
 
 export interface SubmitAnswer {
@@ -60,7 +62,7 @@ export class QuizService {
 
   //30 Aug
   // CHANGED: upload flow now can use parse-upload + review
-  uploadExcel(file: File, title?: string): Observable<any> {
+   uploadExcel(file: File, title?: string): Observable<any> {
     const form = new FormData();
     form.append('file', file);
     if (title) form.append('title', title);
@@ -69,16 +71,17 @@ export class QuizService {
 
   // 30 Aug
   // NEW: parse for preview without saving
-  parseUpload(file: File, title?: string): Observable<{ title: string; questions: any[] }> { // NEW
+   parseUpload(file: File, title?: string, timeLimitMinutes?: number | null): Observable<{ title: string; questions: any[]; timeLimitMinutes?: number | null }> { // NEW
     const form = new FormData(); // NEW
     form.append('file', file); // NEW
     if (title) form.append('title', title); // NEW
-    return this.http.post<{ title: string; questions: any[] }>(`${this.base}/Tests/parse-upload`, form); // NEW
+    if (timeLimitMinutes != null) form.append('timeLimitMinutes', String(timeLimitMinutes)); // NEW
+    return this.http.post<{ title: string; questions: any[]; timeLimitMinutes?: number | null }>(`${this.base}/Tests/parse-upload`, form); // NEW
   }
 
   // 30 Aug
   // NEW: persist edited preview as locked test
-  saveParsedTest(body: { title: string; questions: any[] }): Observable<any> { // NEW
+   saveParsedTest(body: { title: string; questions: any[]; timeLimitMinutes?: number | null }): Observable<any> { // NEW
     return this.http.post(`${this.base}/Tests/save-parsed`, body); // NEW
   }
 
@@ -111,7 +114,7 @@ getTests() {
 
 //30 Aug
  // CHANGED: admin view also returns isLocked
-  getAdminTest(id: number) {
+   getAdminTest(id: number) {
     return this.http.get<any>(`${this.base}/Tests/${id}/admin`);
   }
 
@@ -129,10 +132,14 @@ updateAttemptScore(attemptId: number, score: number) {
 
 
 
-  createTest(title: string): Observable<TestSummary> {
-    return this.http.post<TestSummary>(`${this.base}/Tests`, { title });
+    // CHANGED: allow optional timeLimitMinutes when creating a test
+  createTest(title: string, timeLimitMinutes?: number | null): Observable<TestSummary> { // CHANGED
+    const body: any = { title };
+    if (timeLimitMinutes != null) body.timeLimitMinutes = timeLimitMinutes; // NEW
+    return this.http.post<TestSummary>(`${this.base}/Tests`, body);
   }
 
+  
   addQuestionToTest(testId: number, payload: AddQuestionPayload): Observable<{ questionId: number }> {
     const fd = new FormData();
     fd.append('type', payload.type);

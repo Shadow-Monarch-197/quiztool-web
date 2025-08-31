@@ -1,25 +1,17 @@
-
-
 <div class="container py-4">
    
   <div class="row justify-content-center">
        
     <div class="col-lg-8 col-md-10">
-           
-  
-           
+                 
       <h2 class="fw-semibold text-primary mb-4">
                 <i class="bi bi-upload me-2"></i> Upload Excel → Create Test
              
       </h2>
 
-           
-
-           
+                 
       <form (ngSubmit)="onUpload()" #f="ngForm" class="card shadow-sm p-4">
-                       
-
-               
+                               
         <div class="mb-3">
                    
           <label for="title" class="form-label fw-semibold"
@@ -37,9 +29,13 @@
                  
         </div>
 
-               
-
-               
+        <!-- NEW: time limit minutes (optional) -->
+        <div class="mb-3"> <!-- NEW -->
+          <label class="form-label fw-semibold">Time Limit (minutes, optional)</label> <!-- NEW -->
+          <input type="number" min="1" class="form-control" [(ngModel)]="timeLimitMinutes" name="timeLimitMinutes" placeholder="e.g. 30" /> <!-- NEW -->
+          <div class="form-text text-muted">Leave blank for no time limit.</div> <!-- NEW -->
+        </div> <!-- NEW -->
+                       
         <div class="mb-3">
                    
           <label class="form-label fw-semibold">Excel File</label>          
@@ -54,7 +50,6 @@
                  
         </div>
 
-   
                
         <div class="d-grid">
                    
@@ -68,56 +63,62 @@
       </form>
 
            
-    
+
       <div *ngIf="result" class="alert alert-success mt-4 shadow-sm">
                 <i class="bi bi-check-circle-fill me-2"></i>        
-        <strong>Uploaded:</strong> {{ result.title }} ({{
-          result.questions
-        }}
+        <strong>Uploaded:</strong> {{ result.title }} ({{ result.questions }}
         questions) —        
         <span class="text-muted">Test ID: {{ result.testId }}</span>      
       </div>
 
-           
-
-      
-            
-        <div class="card shadow-sm mt-5 test-list">
-  <div class="card-header d-flex justify-content-between align-items-center">
-    <h5 class="mb-0 fw-semibold text-secondary">
-      <i class="bi bi-journal-text me-2"></i> All Tests
-    </h5>
-    <button class="btn btn-sm btn-outline-secondary" (click)="load()">
-      <i class="bi bi-arrow-clockwise me-1"></i> Refresh
-    </button>
-  </div>
-
-
-  <div class="card-body p-0">
-    <ul class="list-group list-group-flush">
-      <li
-        *ngFor="let t of tests"
-        class="list-group-item d-flex align-items-center justify-content-between px-4 py-3">
-
-        <div class="text-truncate pe-3">
-          <b class="text-wrap">{{ t.title }}</b>
-          <span class="text-muted">
-            — {{ t.questionCount }} Q — {{ t.createdAt | date:'short' }}
-          </span>
-        </div>
-
-        <div class="btn-group">
-          <a class="btn btn-sm btn-outline-primary" [routerLink]="['/admin-test', t.id]">
-            View
-          </a>
-          <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete(t)">
-            Delete
+                
+      <div class="card shadow-sm mt-5 test-list">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <h5 class="mb-0 fw-semibold text-secondary">
+            <i class="bi bi-journal-text me-2"></i> All Tests
+          </h5>
+          <button class="btn btn-sm btn-outline-secondary" (click)="load()">
+            <i class="bi bi-arrow-clockwise me-1"></i> Refresh
           </button>
         </div>
-      </li>
-    </ul>
-  </div>
-</div>
+
+        <div class="card-body p-0">
+          <ul class="list-group list-group-flush">
+            <li
+              *ngFor="let t of tests"
+              class="list-group-item d-flex align-items-center justify-content-between px-4 py-3"
+            >
+              <div class="text-truncate pe-3">
+                <b class="text-wrap">{{ t.title }}</b>
+                <span class="text-muted">
+                  — {{ t.questionCount }} Q — {{ t.createdAt | date : "short" }}
+                  <!-- NEW: show time limit if present -->
+                  <ng-container *ngIf="t.timeLimitMinutes">
+                    — ⏱ {{ t.timeLimitMinutes }}m
+                  </ng-container>
+                </span>
+              </div>
+
+              <div class="btn-group">
+                <a
+                  class="btn btn-sm btn-outline-primary"
+                  [routerLink]="['/admin-test', t.id]"
+                >
+                  View
+                </a>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="confirmDelete(t)"
+                >
+                  Delete
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
          
     </div>
      

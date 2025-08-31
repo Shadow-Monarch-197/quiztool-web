@@ -17,6 +17,8 @@ export class AdminTestViewComponent implements OnInit {
     id: number;
     title: string;
     isLocked?: boolean; //NEW
+    // NEW: time limit
+    timeLimitMinutes?: number | null; // NEW
     questions: Array<{
       id: number;
       text: string;

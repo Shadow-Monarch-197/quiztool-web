@@ -10,6 +10,8 @@ import { QuizService } from 'src/app/services/quiz.service';
 export class AdminUploadComponent {
   file?: File;
   title = '';
+// NEW: time limit input (minutes)
+  timeLimitMinutes: number | null = null; // NEW
   result: any;
   tests: any[] = [];
 
@@ -23,14 +25,13 @@ constructor(private quiz: QuizService, private router: Router) { this.load(); }
 
 // 30 Aug 
   // CHANGED: go through parse → review instead of direct save
-  onUpload() {
+ onUpload() {
     if (!this.file) return;
-    this.quiz.parseUpload(this.file, this.title).subscribe({ // CHANGED
+    this.quiz.parseUpload(this.file, this.title, this.timeLimitMinutes ?? null).subscribe({ // CHANGED
       next: (res) => {
-        // navigate to review page with state
-        this.router.navigate(['/admin-upload-review'], { state: { draft: res } }); // NEW
+        this.router.navigate(['/admin-upload-review'], { state: { draft: res } });
       },
-      error: (err) => alert(err.error?.message || 'Upload parse failed') // CHANGED
+      error: (err) => alert(err.error?.message || 'Upload parse failed')
     });
   }
 

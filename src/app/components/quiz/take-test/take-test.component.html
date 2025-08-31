@@ -6,6 +6,13 @@
         <div class="text-muted small">
           {{ test.questions?.length || 0 }} Questions
         </div>
+        <!-- NEW: show countdown if time limit -->
+        <div *ngIf="timeLimitMinutes" class="badge text-bg-dark px-3 py-2">
+          <!-- NEW -->
+          ⏱ {{ timeLeftText || "00:00" }}
+          <!-- NEW -->
+        </div>
+        <!-- NEW -->
       </div>
 
       <div class="mb-4">
@@ -107,9 +114,22 @@
               [(ngModel)]="email"
             />
           </div>
-          <div class="col-12 col-lg-6 text-lg-end">
+          <div
+            class="col-12 col-lg-6 text-lg-end d-flex gap-3 justify-content-end"
+          >
+            <!-- NEW: review unanswered button -->
             <button
-              class="btn btn-success btn-lg px-4"
+              class="btn btn-outline-primary btn-md px-4 py-2"
+              type="button"
+              (click)="reviewUnanswered()"
+            >
+              <!-- NEW -->
+              <i class="bi bi-eye me-1"></i> Review unanswered
+              <!-- NEW -->
+            </button>
+            <!-- NEW -->
+            <button
+              class="btn btn-success btn-md px-4 py-2"
               (click)="submit()"
               [disabled]="!canSubmit || submitting"
             >

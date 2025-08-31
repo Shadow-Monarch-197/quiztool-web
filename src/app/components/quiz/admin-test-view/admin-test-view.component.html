@@ -4,6 +4,7 @@
       <h5 class="mb-0">
         {{ test?.title }}
         <span *ngIf="test?.isLocked" class="badge bg-secondary ms-2">Locked</span> 
+        <span *ngIf="test?.timeLimitMinutes" class="badge bg-info ms-2">⏱ {{ test?.timeLimitMinutes }}m</span>
       </h5>
     <div class="d-flex gap-2">
       <span class="badge text-bg-secondary"
