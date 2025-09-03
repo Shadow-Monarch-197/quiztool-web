@@ -17,7 +17,9 @@ export class AdminAssignTestComponent implements OnInit {
   users: { userid: number; name: string; email: string }[] = [];
   assignees = new Set<string>(); // emails
   selected = new Set<string>();  // emails (checkbox UI)
-  search = '';
+
+  // *** CHANGED: rename from `search` to `searchText` to avoid type collisions ***
+  searchText: string = '';
 
   saving = false;
 
@@ -41,7 +43,7 @@ export class AdminAssignTestComponent implements OnInit {
     // load users + existing assignees in parallel
     this.usersApi.getallusers().subscribe({
       next: (arr) => {
-        this.users = (arr || []).map((u: any) => ({ userid: u.userid, name: u.name, email: u.email?.toLowerCase() }));
+        this.users = (arr || []).map((u: any) => ({ userid: u.userid, name: u.name, email: (u.email || '').toLowerCase() }));
         this.quiz.getAssignees(this.testId).subscribe({
           next: (as) => {
             (as || []).forEach(a => this.assignees.add((a.email || '').toLowerCase()));
@@ -56,11 +58,12 @@ export class AdminAssignTestComponent implements OnInit {
     });
   }
 
+  // *** CHANGED: filter uses `searchText` ***
   filteredUsers() {
-    const q = this.search.trim().toLowerCase();
+    const q = (this.searchText || '').trim().toLowerCase();
     if (!q) return this.users;
     return this.users.filter(u =>
-      u.email.toLowerCase().includes(q) || (u.name || '').toLowerCase().includes(q)
+      (u.email || '').toLowerCase().includes(q) || (u.name || '').toLowerCase().includes(q)
     );
   }
 
@@ -74,7 +77,7 @@ export class AdminAssignTestComponent implements OnInit {
   }
 
   selectAllVisible() {
-    this.filteredUsers().forEach(u => this.selected.add(u.email.toLowerCase()));
+    this.filteredUsers().forEach(u => this.selected.add((u.email || '').toLowerCase()));
   }
   clearAll() { this.selected.clear(); }
 
