@@ -9,12 +9,8 @@
     <input
       class="form-control"
       placeholder="Search name or email…"
-      [value]="searchText"
-      (input)="onSearchInput($event)"
+      [(ngModel)]="search"
     />
-    <button class="btn btn-outline-secondary" (click)="selectAllVisible()">
-      Select visible
-    </button>
     <button class="btn btn-outline-secondary" (click)="selectAllVisible()">
       Select visible
     </button>

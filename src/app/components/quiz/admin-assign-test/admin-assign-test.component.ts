@@ -1,6 +1,4 @@
-// src/app/components/quiz/admin-assign-test/admin-assign-test.component.ts
-// NEW / CHANGED
-
+// NEW
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuizService } from 'src/app/services/quiz.service';
@@ -19,9 +17,7 @@ export class AdminAssignTestComponent implements OnInit {
   users: { userid: number; name: string; email: string }[] = [];
   assignees = new Set<string>(); // emails
   selected = new Set<string>();  // emails (checkbox UI)
-
-  // CHANGED: use a different property name to avoid any collision with a method named `search`
-  searchText = ''; // string
+  search = '';
 
   saving = false;
 
@@ -45,11 +41,7 @@ export class AdminAssignTestComponent implements OnInit {
     // load users + existing assignees in parallel
     this.usersApi.getallusers().subscribe({
       next: (arr) => {
-        this.users = (arr || []).map((u: any) => ({
-          userid: u.userid,
-          name: u.name,
-          email: (u.email || '').toLowerCase()
-        }));
+        this.users = (arr || []).map((u: any) => ({ userid: u.userid, name: u.name, email: u.email?.toLowerCase() }));
         this.quiz.getAssignees(this.testId).subscribe({
           next: (as) => {
             (as || []).forEach(a => this.assignees.add((a.email || '').toLowerCase()));
@@ -64,30 +56,13 @@ export class AdminAssignTestComponent implements OnInit {
     });
   }
 
-  // NEW: explicit input handler so $event is a DOM Event, not a string
-  onSearchInput(ev: Event) {
-    const v = (ev.target as HTMLInputElement)?.value ?? '';
-    this.searchText = v;
-    this.applyFilter(); // no-op (getter handles filtering) but keeps template hooks happy
-  }
-
-  // NEW: if you referenced filtering elsewhere, use this getter
-  get visibleUsers() {
-    const q = this.searchText.trim().toLowerCase();
+  filteredUsers() {
+    const q = this.search.trim().toLowerCase();
+    if (!q) return this.users;
     return this.users.filter(u =>
-      !q ||
-      (u.name || '').toLowerCase().includes(q) ||
-      (u.email || '').toLowerCase().includes(q)
+      u.email.toLowerCase().includes(q) || (u.name || '').toLowerCase().includes(q)
     );
   }
-
-  // OPTIONAL: compatibility if anything calls this method; delegates to getter
-  filteredUsers() {
-    return this.visibleUsers;
-  }
-
-  // OPTIONAL: hook for onSearchInput; currently no stateful filtering needed
-  applyFilter(): void { /* no-op; using getter-based filtering */ }
 
   isChecked(email: string) {
     return this.selected.has((email || '').toLowerCase());
@@ -99,9 +74,8 @@ export class AdminAssignTestComponent implements OnInit {
   }
 
   selectAllVisible() {
-    this.visibleUsers.forEach(u => this.selected.add((u.email || '').toLowerCase()));
+    this.filteredUsers().forEach(u => this.selected.add(u.email.toLowerCase()));
   }
-
   clearAll() { this.selected.clear(); }
 
   save() {
