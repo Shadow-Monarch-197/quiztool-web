@@ -132,6 +132,8 @@ import { AdminTestViewComponent } from './components/quiz/admin-test-view/admin-
 import { AttemptReviewComponent } from './components/quiz/attempt-review/attempt-review.component';
 import { AttemptSubmittedComponent } from './components/quiz/attempt-submitted/attempt-submitted.component';
 import { AdminUploadReviewComponent } from './components/quiz/admin-upload-review/admin-upload-review.component'; // NEW
+// NEW import:
+import { AdminAssignTestComponent } from './components/quiz/admin-assign-test/admin-assign-test.component';
 
 
 const routes: Routes = [
@@ -197,6 +199,12 @@ const routes: Routes = [
   component: AttemptSubmittedComponent,
   canMatch: [authMatchGuard],
   canActivate: [authGuard],
+},
+{
+    path: 'admin-assign/:id',
+    component: AdminAssignTestComponent,
+    canMatch: [adminMatchGuard],
+    canActivate: [adminGuard],
 },
 { path: 'admin-upload-review', component: AdminUploadReviewComponent }, // NEW
 

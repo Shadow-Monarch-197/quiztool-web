@@ -161,4 +161,16 @@ updateAttemptScore(attemptId: number, score: number) {
     return this.http.post<{ questionId: number }>(`${this.base}/Tests/${testId}/questions`, fd);
   }
 
+  // NEW: list assignees for a test (admin)
+  getAssignees(testId: number) { // NEW
+    return this.http.get<{ email: string; userId?: number; name?: string; assignedAt: string; }[]>(
+      `${this.base}/Tests/${testId}/assignees`
+    );
+  }
+
+  // NEW: assign a test to emails (admin)
+  assignUsersToTest(testId: number, emails: string[]) { // NEW
+    return this.http.post(`${this.base}/Tests/${testId}/assign`, { emails });
+  }
+
 }

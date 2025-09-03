@@ -30,11 +30,25 @@
         </div>
 
         <!-- NEW: time limit minutes (optional) -->
-        <div class="mb-3"> <!-- NEW -->
-          <label class="form-label fw-semibold">Time Limit (minutes, optional)</label> <!-- NEW -->
-          <input type="number" min="1" class="form-control" [(ngModel)]="timeLimitMinutes" name="timeLimitMinutes" placeholder="e.g. 30" /> <!-- NEW -->
-          <div class="form-text text-muted">Leave blank for no time limit.</div> <!-- NEW -->
-        </div> <!-- NEW -->
+        <div class="mb-3">
+          <!-- NEW -->
+          <label class="form-label fw-semibold"
+            >Time Limit (minutes, optional)</label
+          >
+          <!-- NEW -->
+          <input
+            type="number"
+            min="1"
+            class="form-control"
+            [(ngModel)]="timeLimitMinutes"
+            name="timeLimitMinutes"
+            placeholder="e.g. 30"
+          />
+          <!-- NEW -->
+          <div class="form-text text-muted">Leave blank for no time limit.</div>
+          <!-- NEW -->
+        </div>
+        <!-- NEW -->
                        
         <div class="mb-3">
                    
@@ -107,6 +121,12 @@
                   [routerLink]="['/admin-test', t.id]"
                 >
                   View
+                </a>
+                <a
+                  class="btn btn-sm btn-outline-success"
+                  [routerLink]="['/admin-assign', t.id]"
+                >
+                  Assign
                 </a>
                 <button
                   class="btn btn-sm btn-outline-danger"
