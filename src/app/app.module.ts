@@ -20,6 +20,7 @@ import { AdminTestViewComponent } from './components/quiz/admin-test-view/admin-
 import { AttemptReviewComponent } from './components/quiz/attempt-review/attempt-review.component';
 import { AttemptSubmittedComponent } from './components/quiz/attempt-submitted/attempt-submitted.component';
 import { AdminUploadReviewComponent } from './components/quiz/admin-upload-review/admin-upload-review.component';
+import { AdminAssignTestComponent } from './components/quiz/admin-assign-test/admin-assign-test.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { AdminUploadReviewComponent } from './components/quiz/admin-upload-revie
     AttemptReviewComponent,
     AttemptSubmittedComponent,
     AdminUploadReviewComponent,
+    AdminAssignTestComponent,
   ],
   imports: [
     BrowserModule,
